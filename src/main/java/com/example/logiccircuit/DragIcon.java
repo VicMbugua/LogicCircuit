@@ -1,10 +1,7 @@
 package com.example.logiccircuit;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
-import javafx.scene.input.DragEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.geometry.Point2D;
 
@@ -44,16 +41,16 @@ public class DragIcon extends AnchorPane {
 
         switch (mType) {
 
-            case blue:
-                getStyleClass().add("icon-blue");
+            case not:
+                getStyleClass().add("icon-not");
             break;
 
-            case red:
-                getStyleClass().add("icon-red");
+            case and:
+                getStyleClass().add("icon-and");
             break;
 
-            case green:
-                getStyleClass().add("icon-green");
+            case or:
+                getStyleClass().add("icon-or");
             break;
 
             default:

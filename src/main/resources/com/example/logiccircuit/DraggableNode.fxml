@@ -9,15 +9,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <fx:root fx:id="root_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="96.0" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <GridPane>
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="49.0" minWidth="10.0" prefWidth="49.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="74.0" minWidth="10.0" prefWidth="74.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0" minWidth="0.0" prefWidth="0.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -28,14 +27,12 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="title_bar" text="Label" />
+                  <Label fx:id="title_bar" />
                </children>
             </GridPane>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <AnchorPane fx:id="left_link_handle" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" />
                   <AnchorPane fx:id="node_body" prefHeight="200.0" prefWidth="200.0" />
-                  <AnchorPane fx:id="right_link_handle" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" />
                </children>
             </HBox>
          </children>

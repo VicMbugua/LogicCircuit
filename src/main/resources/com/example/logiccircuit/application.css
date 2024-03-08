@@ -2,17 +2,23 @@
     -fx-background-radius: 10;
 }
 
-.icon-blue{
-    -fx-background-color: blue;
-    -fx-background-image: url("/images/and.png");
+.icon-not{
+    -fx-background-image: url("not.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
 }
 
-.icon-red{
-    -fx-background-color: red;
-    -fx-background-image: url("/images/or.png");
+.icon-and{
+    -fx-background-image: url("and.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
 }
 
-.icon-green{
-    -fx-background-color: green;
-    -fx-background-image: url("/images/not.png");
+.icon-or{
+    -fx-background-image: url("or.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
 }

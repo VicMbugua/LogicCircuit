@@ -3,7 +3,6 @@ package com.example.logiccircuit;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
@@ -25,6 +24,7 @@ public class DraggableNode extends AnchorPane {
 
     @FXML private Label title_bar;
     @FXML private Label close_button;
+    @FXML private AnchorPane node_body;
 
     private final DraggableNode self;
 
@@ -50,7 +50,7 @@ public class DraggableNode extends AnchorPane {
          It sets the needed DragOver / DragDropped handlers, and begins drag operations.*/
         //drag detection for node dragging
         // TODO change this later
-        title_bar.setOnDragDetected ( new EventHandler <MouseEvent> () {
+        node_body.setOnDragDetected ( new EventHandler <MouseEvent> () {
 
             @Override
             public void handle(MouseEvent event) {
@@ -132,16 +132,16 @@ public class DraggableNode extends AnchorPane {
 
         switch (mType) {
 
-            case blue:
-                getStyleClass().add("icon-blue");
+            case not:
+                getStyleClass().add("icon-not");
                 break;
 
-            case red:
-                getStyleClass().add("icon-red");
+            case and:
+                getStyleClass().add("icon-and");
                 break;
 
-            case green:
-                getStyleClass().add("icon-green");
+            case or:
+                getStyleClass().add("icon-or");
                 break;
 
             default:
