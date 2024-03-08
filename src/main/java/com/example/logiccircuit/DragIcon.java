@@ -46,18 +46,18 @@ public class DragIcon extends AnchorPane {
 
             case blue:
                 getStyleClass().add("icon-blue");
-                break;
+            break;
 
             case red:
                 getStyleClass().add("icon-red");
-                break;
+            break;
 
             case green:
                 getStyleClass().add("icon-green");
-                break;
+            break;
 
             default:
-                break;
+            break;
 
         }
     }

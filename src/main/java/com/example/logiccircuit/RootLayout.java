@@ -71,57 +71,101 @@ public class RootLayout extends AnchorPane {
     }
 
     private void addDragDetection(DragIcon dragIcon){
-        dragIcon.setOnDragDetected(new EventHandler<MouseEvent>() {
+        dragIcon.setOnDragDetected (new EventHandler <MouseEvent> () {
+
             @Override
-            public void handle(MouseEvent mouseEvent) {
+            public void handle(MouseEvent event) {
+
+                // set drag event handlers on their respective objects
                 base_pane.setOnDragOver(mIconDragOverRoot);
                 right_pane.setOnDragOver(mIconDragOverRightPane);
-                right_pane.setOnDragOver(mIconDragDropped);
+                right_pane.setOnDragDropped(mIconDragDropped);
 
-                DragIcon icn = (DragIcon) mouseEvent.getSource();
+                // get a reference to the clicked DragIcon object
+                DragIcon icn = (DragIcon) event.getSource();
 
+                //begin drag ops
                 mDragOverIcon.setType(icn.getType());
-                mDragOverIcon.relocateToPoint(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                mDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
 
                 ClipboardContent content = new ClipboardContent();
-                content.putString(icn.getType().toString());
+                DragContainer container = new DragContainer();
+
+                container.addData ("type", mDragOverIcon.getType().toString());
+                content.put(DragContainer.AddNode, container);
 
                 mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
                 mDragOverIcon.setVisible(true);
                 mDragOverIcon.setMouseTransparent(true);
-                mouseEvent.consume();
+                event.consume();
 
             }
         });
     }
 
     public void buildDragHandlers(){
-        mIconDragOverRoot = new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                Point2D p = right_pane.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
+        mIconDragOverRoot = new EventHandler <DragEvent>() {
 
-                if(!right_pane.boundsInLocalProperty().get().contains(p)){
-                    mDragOverIcon.relocateToPoint(new Point2D(dragEvent.getSceneX(), dragEvent.getSceneY()));
+            @Override
+            public void handle(DragEvent event) {
+
+                Point2D p = right_pane.sceneToLocal(event.getSceneX(), event.getSceneY());
+
+                //turn on transfer mode and track in the right-pane's context
+                //if (and only if) the mouse cursor falls within the right pane's bounds.
+                if (!right_pane.boundsInLocalProperty().get().contains(p)) {
+
+                    event.acceptTransferModes(TransferMode.ANY);
+                    mDragOverIcon.relocateToPoint(new Point2D(event.getSceneX(), event.getSceneY()));
+                    return;
                 }
 
-                dragEvent.consume();
+                event.consume();
             }
         };
 
-        mIconDragOverRightPane = new EventHandler<DragEvent>() {
+        mIconDragOverRightPane = new EventHandler <DragEvent> () {
+
             @Override
-            public void handle(DragEvent dragEvent) {
-                dragEvent.acceptTransferModes(TransferMode.ANY);
-                mDragOverIcon.relocateToPoint(new Point2D(dragEvent.getSceneX(), dragEvent.getSceneY()));
-                dragEvent.consume();
+            public void handle(DragEvent event) {
+
+                event.acceptTransferModes(TransferMode.ANY);
+
+                //convert the mouse coordinates to scene coordinates,
+                //then convert back to coordinates that are relative to
+                //the parent of mDragIcon.  Since mDragIcon is a child of the root
+                //pane, coodinates must be in the root pane's coordinate system to work
+                //properly.
+                mDragOverIcon.relocateToPoint(
+                        new Point2D(event.getSceneX(), event.getSceneY())
+                );
+                event.consume();
             }
         };
 
-        mIconDragDropped = new EventHandler<DragEvent>() {
+        mIconDragDropped = new EventHandler <DragEvent> () {
+
             @Override
-            public void handle(DragEvent dragEvent) {
-                dragEvent.setDropCompleted(true);
+            public void handle(DragEvent event) {
+
+                DragContainer container =
+                        (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
+
+                container.addData("scene_coords",
+                        new Point2D(event.getSceneX(), event.getSceneY()));
+
+                ClipboardContent content = new ClipboardContent();
+                content.put(DragContainer.AddNode, container);
+
+                event.getDragboard().setContent(content);
+                event.setDropCompleted(true);
+            }
+        };
+
+        this.setOnDragDone (new EventHandler <DragEvent> (){
+
+            @Override
+            public void handle (DragEvent event) {
 
                 right_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverRightPane);
                 right_pane.removeEventHandler(DragEvent.DRAG_DROPPED, mIconDragDropped);
@@ -129,20 +173,28 @@ public class RootLayout extends AnchorPane {
 
                 mDragOverIcon.setVisible(false);
 
-                dragEvent.consume();
-            }
-        };
+                DragContainer container =
+                        (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
 
-        this.setOnDragDone(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                right_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverRightPane);
-                right_pane.removeEventHandler(DragEvent.DRAG_DROPPED, mIconDragDropped);
-                base_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverRoot);
+                if (container != null) {
+                    if (container.getValue("scene_coords") != null) {
 
-                mDragOverIcon.setVisible(false);
+                        DraggableNode node = new DraggableNode();
 
-                dragEvent.consume();
+                        node.setType(DragIconType.valueOf(container.getValue("type")));
+                        right_pane.getChildren().add(node);
+
+                        Point2D cursorPoint = container.getValue("scene_coords");
+
+                        node.relocateToPoint(
+                                new Point2D(cursorPoint.getX() - 32, cursorPoint.getY() - 32)
+                        );
+                    }
+                }
+
+
+
+                event.consume();
             }
         });
     }

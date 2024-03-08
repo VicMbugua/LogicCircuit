@@ -4,12 +4,15 @@
 
 .icon-blue{
     -fx-background-color: blue;
+    -fx-background-image: url("/images/and.png");
 }
 
 .icon-red{
     -fx-background-color: red;
+    -fx-background-image: url("/images/or.png");
 }
 
 .icon-green{
     -fx-background-color: green;
+    -fx-background-image: url("/images/not.png");
 }
